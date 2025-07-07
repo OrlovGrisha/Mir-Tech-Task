@@ -1,0 +1,226 @@
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  rel="stylesheet"
+/>
+
+<div class="d-flex w-100 justify-content-center">
+  <table class="table table-bordered w-100">
+    <thead>
+      <!-- Заголовки таблицы с кнопками сортировки -->
+      <tr>
+        <th class="align-middle">
+          <div class="d-flex align-items-center justify-content-between">
+            ФИО
+            <div>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('fullName', true); onFiltersChanged()">
+                <i class="bi bi-arrow-up"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('fullName', false); onFiltersChanged()">
+                <i class="bi bi-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+        </th>
+        <th class="align-middle">
+          <div class="d-flex align-items-center justify-content-between">
+            Отдел
+            <div>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('department', true); onFiltersChanged()">
+                <i class="bi bi-arrow-up"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('department', false); onFiltersChanged()">
+                <i class="bi bi-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+        </th>
+        <th class="align-middle">
+          <div class="d-flex align-items-center justify-content-between">
+            Дата рождения
+            <div>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('birthday', true); onFiltersChanged()">
+                <i class="bi bi-arrow-up"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('birthday', false); onFiltersChanged()">
+                <i class="bi bi-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+        </th>
+        <th class="align-middle">
+          <div class="d-flex align-items-center justify-content-between">
+            Дата найма
+            <div>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('hireDate', true); onFiltersChanged()">
+                <i class="bi bi-arrow-up"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('hireDate', false); onFiltersChanged()">
+                <i class="bi bi-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+        </th>
+        <th class="align-middle">
+          <div class="d-flex align-items-center justify-content-between">
+            Зарплата
+            <div>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('salary', true); onFiltersChanged()">
+                <i class="bi bi-arrow-up"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="onSort('salary', false); onFiltersChanged()">
+                <i class="bi bi-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+        </th>
+        <th></th>
+      </tr>
+      <!-- Фильтры -->
+      <tr>
+        <th style="padding-bottom: 25px;">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            placeholder="Фильтр ФИО"
+            [(ngModel)]="filters.fullName"
+            (ngModelChange)="onFiltersChanged()"
+          /> 
+        </th>
+        <th style="padding-bottom: 25px;">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            placeholder="Фильтр отдела"
+            [(ngModel)]="filters.department"
+            (ngModelChange)="onFiltersChanged()"
+          />
+        </th>
+        <th>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="filters.leftBirthday"
+            (ngModelChange)="onFiltersChanged()"
+          />
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="filters.rightBirthday"
+            (ngModelChange)="onFiltersChanged()"
+          />
+        </th>
+        <th>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="filters.leftHireDate"
+            (ngModelChange)="onFiltersChanged()"
+          />
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="filters.rightHireDate"
+            (ngModelChange)="onFiltersChanged()"
+          />
+        </th>
+        <th>
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            placeholder="Зарплата от"
+            [(ngModel)]="filters.leftSalary"
+            (ngModelChange)="onFiltersChanged()"
+          />
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            placeholder="Зарплата до"
+            [(ngModel)]="filters.rightSalary"
+            (ngModelChange)="onFiltersChanged()"
+          />
+        </th>
+        <th>
+          <div class="d-flex justify-content-center w-100" style="padding-bottom: 10px;">
+            <button 
+              class="btn btn-success" data-bs-toggle="modal"
+              data-bs-target="#employeeModal" 
+              (click)="openCreateModal()">
+              Создать
+            </button>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emp of employees">
+        <td>{{ emp.fullName }}</td>
+        <td>{{ emp.department }}</td>
+        <td>{{ emp.birthday | date: 'dd.MM.yyyy' }}</td>
+        <td>{{ emp.hireDate | date: 'dd.MM.yyyy' }}</td>
+        <td>{{ emp.salary }}</td>
+        <td class="d-flex gap-3 justify-content-around">
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#employeeModal" (click)="openEditModal(emp)">Редактировать</button>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" (click)="openDeleteModal(emp)">Удалить</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- Модальное окно добавления/редактирования -->
+<div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="employeeModalLabel">{{ modalTitle }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <form #employeeForm="ngForm">
+          <div class="mb-3">
+            <label class="form-label">ФИО</label>
+            <input type="text" class="form-control" [(ngModel)]="currentEmployee.fullName" name="fullName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Отдел</label>
+            <input type="text" class="form-control" [(ngModel)]="currentEmployee.department" name="department">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Дата рождения</label>
+            <input type="date" class="form-control" [(ngModel)]="currentEmployee.birthday" name="birthday">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Дата найма</label>
+            <input type="date" class="form-control" [(ngModel)]="currentEmployee.hireDate" name="hireDate">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Зарплата</label>
+            <input type="number" class="form-control" [(ngModel)]="currentEmployee.salary" name="salary">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="saveEmployee(currentEmployee)">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Модальное окно удаления -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Подтверждение удаления</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        Вы уверены, что хотите удалить сотрудника <strong>{{ currentEmployee.fullName }}</strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="confirmDelete()">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
